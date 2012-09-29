@@ -11,44 +11,58 @@
  */
 class BooksModel
 {
-	
+	/**
+	 * The Books AR
+	 * @var BooksActiveRecord $booksActiveRecord
+	 */
 	protected $_booksActiveRecord;
 	
+	/**
+	 * Constructor with DI
+	 * @param BooksActiveRecord $booksActiveRecord
+	 */
 	public function __construct(BooksActiveRecord $booksActiveRecord = null) 
 	{
 		$this->_booksActiveRecord = $booksActiveRecord;
 	}
 	
+	/**
+	 * @return BooksActiveRecord The Books AR
+	 */
 	public function getBooksActiveRecord() 
 	{
 		return $this->_booksActiveRecord;
 	}
-
+	
+	/**
+	 * Save data to DB using BooksAR and other AR if needed
+	 * @param array $data
+	 */
 	public function save(array $data) 
 	{
 		$this->_booksActiveRecord->attributes = $data;
 		return $this->_booksActiveRecord->save();
 	}
 	
-	public function update($id, $data) 
-	{
-		if (null === ($record = $this->_booksActiveRecord->findByPk($id))) {
-			return false;			
-		}
-		$record->attributes = $data;		
-		return $record->save();
-	}
-	
+	/**
+	 * Delete a Record.
+	 * @param int $id ID of the AR to delete
+	 */
 	public function deleteById($id) 
 	{
 		return $this->_booksActiveRecord->deleteByPk($id);
 	}
 	
-	public function getBook($id) 
+	/**
+	 * Get a Book AR By ID
+	 * @param int $id The ID of the AR
+	 */
+	public function getBookActiveRecordById($id) 
 	{
 		if (null === ($record = $this->_booksActiveRecord->findByPk($id))) {
-			return false;			
+			$this->_booksActiveRecord = null;	
 		}
-		return $record;		
+		$this->_booksActiveRecord = $record;
+		return $record;
 	}
 }
